@@ -51,32 +51,42 @@ import 'package:beh_doctor/models/VerifyOtpModel.dart';
 class AuthRepo {
   final ApiService _apiService = ApiService();
 
-  // 🔹 Request OTP
+  // --------------------------------------------------------
+  // 🔹 REQUEST OTP (NO EXTRA VALUE PARAMETER)
+  // --------------------------------------------------------
   Future<VerifyOtpApiResponse> requestOtp({
     required String phone,
     required String dialCode,
   }) async {
     try {
       final response = await _apiService.getPostResponse(
-  '${ApiConstants.baseUrl}/api/doctor/auth/request',
-  {
-    "phone": phone,
-    "dialCode": dialCode, // contains the PLUS
-  },
-);
+        '${ApiConstants.baseUrl}/api/doctor/auth/request',
+        {
+          "phone": phone,
+          "dialCode": dialCode,        // MUST include "+"
+        },
+      );
 
-      log("Request OTP Response: $response");
+      log("🔵 Request OTP Response: $response");
+
       return VerifyOtpApiResponse.fromMap(response);
+
     } catch (err) {
-      return VerifyOtpApiResponse(status: 'error', message: 'Failed to request OTP');
+      log("🔴 Request OTP ERROR: $err");
+      return VerifyOtpApiResponse(
+        status: 'error',
+        message: 'Failed to request OTP',
+      );
     }
   }
 
-  // 🔹 Verify OTP
+  // --------------------------------------------------------
+  // 🔹 VERIFY OTP
+  // --------------------------------------------------------
   Future<VerifyOtpApiResponse> verifyOtp({
     required String traceId,
     required String otpCode,
-    required String deviceToken, // user device token
+    required String deviceToken,
   }) async {
     try {
       final verifyOtpModel = VerifyOtpModel(
@@ -90,22 +100,40 @@ class AuthRepo {
         verifyOtpModel.toMap(),
       );
 
-      log("Verify OTP Request: ${verifyOtpModel.toMap()}");
-      log("Verify OTP Response: $response");
+      log("🟡 Verify OTP Request: ${verifyOtpModel.toMap()}");
+      log("🟢 Verify OTP Response: $response");
 
       return VerifyOtpApiResponse.fromMap(response);
+
     } catch (err) {
-      return VerifyOtpApiResponse(status: 'error', message: 'Failed to verify OTP');
+      log("🔴 Verify OTP ERROR: $err");
+      return VerifyOtpApiResponse(
+        status: 'error',
+        message: 'Failed to verify OTP',
+      );
     }
   }
 
-  // 🔹 Resend OTP
-  Future<void> resendOtp({required String traceId, required String dialCode}) async {
+  // --------------------------------------------------------
+  // 🔹 RESEND OTP
+  // --------------------------------------------------------
+  Future<void> resendOtp({
+    required String traceId,
+    required String dialCode,
+  }) async {
     try {
       await _apiService.getPostResponse(
         '${ApiConstants.baseUrl}/api/common/resendOtp',
-        {"traceId": traceId},
+        {
+          "traceId": traceId,
+          "dialCode": dialCode,
+        },
       );
-    } catch (_) {}
+
+      log("🔄 OTP Resent Successfully");
+
+    } catch (err) {
+      log("🔴 Resend OTP ERROR: $err");
+    }
   }
 }

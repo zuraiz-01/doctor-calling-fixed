@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 /// 🔹 OTP request/verify payload
@@ -49,7 +48,7 @@ class VerifyOtpApiResponseData {
 
     return VerifyOtpApiResponseData(
       traceId: map['traceId'] as String?,
-      token: map['token'] as String?, // token returned by server
+      token: map['token'] as String?,
       isNewUser: newUser,
     );
   }
@@ -80,7 +79,7 @@ class VerifyOtpApiResponse {
       status: map['status'] as String?,
       message: map['message'] as String?,
       data: map['data'] != null
-          ? VerifyOtpApiResponseData.fromMap(map['data'] as Map<String, dynamic>)
+          ? VerifyOtpApiResponseData.fromMap(map['data'])
           : null,
     );
   }

@@ -156,10 +156,10 @@
 import 'package:beh_doctor/repo/AuthRepo.dart';
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpController extends GetxController {
   final AuthRepo repo = AuthRepo();
-  
 
   var otpCode = ''.obs;
   var isOtpLoading = false.obs;
@@ -168,6 +168,7 @@ class OtpController extends GetxController {
   var resendSeconds = 30.obs;
   Timer? _resendTimer;
 
+  /// 🔹 Verify OTP and save user token
   Future<void> verifyOtp({
     required String traceId,
     required String bottomNavRoute,
@@ -176,8 +177,11 @@ class OtpController extends GetxController {
       Get.snackbar('Error', 'Enter OTP');
       return;
     }
+
     try {
       isOtpLoading.value = true;
+
+      // Device token generate karna (unique per device/session)
       final deviceToken = DateTime.now().millisecondsSinceEpoch.toString();
 
       final result = await repo.verifyOtp(
@@ -186,8 +190,13 @@ class OtpController extends GetxController {
         deviceToken: deviceToken,
       );
 
-      if (result.status == 'success' && result.data != null) {
-        Get.offAllNamed(bottomNavRoute);
+      if (result.status == 'success' && result.data != null && result.data!.token != null) {
+        // Save user token in SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('authToken', result.data!.token!);
+
+        Get.snackbar('Success', 'OTP verified and token saved!');
+        Get.offAllNamed(bottomNavRoute); // Navigate to main screen
       } else {
         Get.snackbar('Error', result.message ?? 'OTP verification failed');
       }
@@ -196,24 +205,27 @@ class OtpController extends GetxController {
     }
   }
 
-Future<void> resendOtp({
-  required String traceId,
-  required String dialCode,
-}) async {
-  if (!isResendEnabled.value) return;
-  try {
-    await repo.resendOtp(traceId: traceId, dialCode: dialCode);
-    Get.snackbar('OTP', 'OTP resent successfully');
-    startResendTimer();
-  } catch (e) {
-    Get.snackbar('Error', 'Failed to resend OTP');
+  /// 🔹 Resend OTP
+  Future<void> resendOtp({
+    required String traceId,
+    required String dialCode,
+  }) async {
+    if (!isResendEnabled.value) return;
+
+    try {
+      await repo.resendOtp(traceId: traceId, dialCode: dialCode);
+      Get.snackbar('OTP', 'OTP resent successfully');
+      startResendTimer();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to resend OTP');
+    }
   }
-}
 
-
+  /// 🔹 Start resend OTP timer
   void startResendTimer() {
     isResendEnabled.value = false;
     resendSeconds.value = 30;
+
     _resendTimer?.cancel();
     _resendTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (resendSeconds.value > 0) {
@@ -235,5 +247,11 @@ Future<void> resendOtp({
   void onClose() {
     _resendTimer?.cancel();
     super.onClose();
+  }
+
+  /// 🔹 Helper to get saved user token anywhere
+  static Future<String?> getUserToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('authToken');
   }
 }

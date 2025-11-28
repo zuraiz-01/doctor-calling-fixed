@@ -1,13 +1,8 @@
-
-
-import 'package:flutter/material.dart' show Text, TextButton, SizedBox, Colors, CircularProgressIndicator, BuildContext, Scaffold, AppBar, TextField, InputDecoration, OutlineInputBorder, ElevatedButton;
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beh_doctor/modules/auth/controller/OtpController.dart';
 
 class OtpScreen extends StatelessWidget {
-  final OtpController controller = Get.put(OtpController());
-
   final String traceId;
   final String bottomNavRoute;
 
@@ -15,9 +10,8 @@ class OtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Constructor variables ko local me assign kar rahe hain
-    final String _traceId = traceId;
-    final String _bottomNavRoute = bottomNavRoute;
+    // Controller ko yahan init kar rahe hain (permanent, single instance)
+    final OtpController controller = Get.put(OtpController(), permanent: true);
 
     return Scaffold(
       appBar: AppBar(title: const Text("Enter OTP")),
@@ -25,6 +19,7 @@ class OtpScreen extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
+            // OTP input field
             TextField(
               onChanged: (val) => controller.otpCode.value = val,
               keyboardType: TextInputType.number,
@@ -34,37 +29,46 @@ class OtpScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            Obx(
-              () => ElevatedButton(
+
+            // Verify OTP button
+            Obx(() {
+              return ElevatedButton(
                 onPressed: controller.isOtpLoading.value
                     ? null
                     : () => controller.verifyOtp(
-                          traceId: _traceId,
-                          bottomNavRoute: _bottomNavRoute,
+                          traceId: traceId,
+                          bottomNavRoute: bottomNavRoute,
                         ),
                 child: controller.isOtpLoading.value
                     ? const SizedBox(
                         width: 20,
                         height: 20,
-                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
                       )
                     : const Text("Verify OTP"),
-              ),
-            ),
+              );
+            }),
             const SizedBox(height: 10),
-            Obx(
-              () => TextButton(
+
+            // Resend OTP button with timer
+            Obx(() {
+              return TextButton(
                 onPressed: controller.isResendEnabled.value
-                    ? () => controller.resendOtp(traceId: _traceId, dialCode: '+880')
+                    ? () => controller.resendOtp(traceId: traceId, dialCode: '+880')
                     : null,
                 child: Text(
                   controller.isResendEnabled.value
                       ? "Resend OTP"
                       : "Resend in ${controller.resendSeconds.value}s",
-                  style: TextStyle(color: controller.isResendEnabled.value ? Colors.blue : Colors.grey),
+                  style: TextStyle(
+                    color: controller.isResendEnabled.value ? Colors.blue : Colors.grey,
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
           ],
         ),
       ),
