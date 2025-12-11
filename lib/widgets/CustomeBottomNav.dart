@@ -1,4 +1,6 @@
 import 'package:beh_doctor/controller/BottomNavController.dart';
+import 'package:beh_doctor/theme/Appcolars.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,40 +20,44 @@ class CustomBottomNav extends StatelessWidget {
           BoxShadow(color: Colors.black12, blurRadius: 8),
         ],
       ),
-      child: Obx(() {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            navItem("Home", Icons.home, 0),
-            navItem("Appointments", Icons.calendar_month, 1),
-            navItem("Wallet", Icons.wallet, 2),
-            navItem("Profile", Icons.person, 3),
-          ],
-        );
-      }),
+      child: Row(
+  mainAxisAlignment: MainAxisAlignment.spaceAround,
+  children: [
+    navItem("Home", Icons.home, 0),
+    navItem("Earnings", Icons.attach_money, 1),
+    navItem("Queue", Icons.list_alt, 2),
+    navItem("More", Icons.more_horiz, 3),
+  ],
+)
+
     );
   }
 
   Widget navItem(String title, IconData icon, int pageIndex) {
     return GestureDetector(
-      onTap: () => controller.changeTab(pageIndex),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: controller.index.value == pageIndex ? Colors.blue : Colors.grey,
-          ),
-          const SizedBox(height: 2),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 12,
-              color: controller.index.value == pageIndex ? Colors.blue : Colors.grey,
+      onTap: () {
+        controller.changeTab(pageIndex);
+      },
+      child: Obx(() {
+        bool selected = controller.index.value == pageIndex;
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: selected ? AppColors.color008541 : Colors.grey,
             ),
-          ),
-        ],
-      ),
+            const SizedBox(height: 2),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 12,
+                color: selected ? AppColors.color008541  : Colors.grey,
+              ),
+            ),
+          ],
+        );
+      }),
     );
   }
 }

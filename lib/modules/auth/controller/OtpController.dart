@@ -183,6 +183,10 @@ class OtpController extends GetxController {
 
       // Device token generate karna (unique per device/session)
       final deviceToken = DateTime.now().millisecondsSinceEpoch.toString();
+       final prefs = await SharedPreferences.getInstance();
+  final preToken = prefs.getString('preOtpToken');
+
+  print("📌 Sending Pre-OTP Token to server: $preToken");
 
       final result = await repo.verifyOtp(
         traceId: traceId,

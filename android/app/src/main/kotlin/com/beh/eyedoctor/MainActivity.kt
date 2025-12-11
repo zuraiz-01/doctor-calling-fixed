@@ -1,4 +1,4 @@
-package com.example.beh_doctor
+package com.beh.eyedoctor
 
 import io.flutter.embedding.android.FlutterActivity
 
