@@ -17,7 +17,7 @@ import 'package:beh_doctor/views/TermsAndConditionsPage.dart';
 import 'package:beh_doctor/views/TestResultScreen.dart';
 import 'package:beh_doctor/widgets/AppTestWidget.dart';
 import 'package:beh_doctor/widgets/ClinicalResultWidget.dart';
-import 'package:flutter/material.dart';
+
 
 import 'package:get/get.dart';
 
@@ -39,6 +39,7 @@ class AppPages {
       name: Routes.DoctorProfileScreen,
       page: () => DoctorProfileScreen(),
     ),
+    
      GetPage(
       name: Routes.EditProfileScreen,
       page: () => EditProfileScreen(),

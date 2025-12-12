@@ -527,7 +527,8 @@ class AgoraCallController extends GetxController {
 
   // Remote user UID
   var remoteUid = 0.obs;
-
+RxBool isMuted = false.obs;
+RxBool isSpeakerOn = false.obs;
   /// Channel ID = Appointment ID
   String channelId = "";
 
@@ -825,4 +826,18 @@ class AgoraCallController extends GetxController {
 
     await joinDoctorAgora();
   }
+  
+void toggleMute() {
+  isMuted.value = !isMuted.value;
+  engine?.muteLocalAudioStream(isMuted.value);
+}
+
+void switchCamera() {
+  engine?.switchCamera();
+}
+
+void toggleSpeaker() async {
+  isSpeakerOn.value = !isSpeakerOn.value;
+  await engine?.setEnableSpeakerphone(isSpeakerOn.value);
+}
 }
