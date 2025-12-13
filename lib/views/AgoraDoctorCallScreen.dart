@@ -240,7 +240,6 @@
 // }
 // newwithcmra
 import 'package:beh_doctor/apiconstant/apiconstant.dart';
-import 'package:beh_doctor/views/CallsOptionBottomSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:beh_doctor/modules/auth/controller/AgoraCallController.dart';
@@ -310,7 +309,8 @@ class AgoraDoctorCallScreen extends StatelessWidget {
                               controller: VideoViewController.remote(
                                 rtcEngine: controller.engine!,
                                 canvas: VideoCanvas(
-                                  uid: controller.remoteUid.value,
+                                  // uid: controller.remoteUid.value,
+                                      uid: controller.remoteUid.value == 0 ? null : controller.remoteUid.value,
                                 ),
                                 connection: RtcConnection(
                                   channelId: controller.channelId,
@@ -389,34 +389,34 @@ class AgoraDoctorCallScreen extends StatelessWidget {
               ),
 
               /// 🔵 Bottom Sheet Button
-              Positioned(
-                bottom: 120,
-                left: 0,
-                right: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    Get.bottomSheet(
-                      CallOptionsBottomSheet(),
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                    );
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 80),
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Open Options",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // Positioned(
+              //   bottom: 120,
+              //   left: 0,
+              //   right: 0,
+              //   child: GestureDetector(
+              //     onTap: () {
+              //       Get.bottomSheet(
+              //         CallOptionsBottomSheet(),
+              //         isScrollControlled: true,
+              //         backgroundColor: Colors.transparent,
+              //       );
+              //     },
+              //     child: Container(
+              //       margin: EdgeInsets.symmetric(horizontal: 80),
+              //       padding: EdgeInsets.symmetric(vertical: 14),
+              //       decoration: BoxDecoration(
+              //         color: Colors.blue,
+              //         borderRadius: BorderRadius.circular(25),
+              //       ),
+              //       child: Center(
+              //         child: Text(
+              //           "Open Options",
+              //           style: TextStyle(color: Colors.white, fontSize: 16),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           );
         }),

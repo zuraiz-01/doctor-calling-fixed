@@ -749,7 +749,7 @@ SizedBox(
 
   
 
-Get.toNamed(Routes.AgoraDoctorCallScreen);
+// Get.toNamed(Routes.AgoraDoctorCallScreen);
 
 print("APPOINTMENT lodoo DEBUG ---> ${appointment.toMap()}");
 

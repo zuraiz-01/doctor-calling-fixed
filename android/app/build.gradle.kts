@@ -1,12 +1,13 @@
+import java.util.Properties
+import java.io.File
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
 
     // Flutter Plugin MUST remain here
     id("dev.flutter.flutter-gradle-plugin")
-
-    //  ADD THIS (Firebase Google Services)
-   // id("com.google.gms.google-services")
 }
 
 android {
@@ -20,22 +21,43 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = "17"
     }
 
     defaultConfig {
-        //  IMPORTANT — Use your real applicationId, NOT example
-         applicationId ="com.beh.eyedoctor"
-
+        applicationId = "com.beh.eyedoctor"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
+ signingConfigs {
+    create("release") {
+        val propsFile = rootProject.file("key.properties")
+        if (propsFile.exists()) {
+            val keystoreProps = Properties()
+            keystoreProps.load(FileInputStream(propsFile))
+
+            storeFile = rootProject.file(keystoreProps["storeFile"] as String)
+            storePassword = keystoreProps["storePassword"] as String
+            keyAlias = keystoreProps["keyAlias"] as String
+            keyPassword = keystoreProps["keyPassword"] as String
+        }
+    }
+}
+
+
     buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("debug")
+        getByName("release") {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+
+        getByName("debug") {
+            // Use default Flutter debug keystore
+            // No need to assign signingConfig explicitly
         }
     }
 }
@@ -43,6 +65,3 @@ android {
 flutter {
     source = "../.."
 }
-
-//  Firebase requires this — MUST be at bottom
-//apply plugin: "com.google.gms.google-services"
