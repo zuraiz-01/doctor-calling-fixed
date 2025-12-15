@@ -1,11 +1,9 @@
-
-
 import 'package:beh_doctor/views/PatientInfoScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:beh_doctor/models/AppointmentModel.dart';
-
+import 'package:beh_doctor/shareprefs.dart';
 
 class AppointmentListWidget extends StatelessWidget {
   final List<Appointment> appointments;
@@ -27,7 +25,9 @@ class AppointmentListWidget extends StatelessWidget {
   String getFullUrl(String? path) {
     if (path == null || path.isEmpty) return "";
     if (path.startsWith("http")) return path;
-    final cleanBase = imageBaseUrl.endsWith("/") ? imageBaseUrl : "$imageBaseUrl/";
+    final cleanBase = imageBaseUrl.endsWith("/")
+        ? imageBaseUrl
+        : "$imageBaseUrl/";
     final cleanPath = path.startsWith("/") ? path.substring(1) : path;
     return cleanBase + cleanPath;
   }
@@ -52,7 +52,8 @@ class AppointmentListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isLoading) return const Center(child: CircularProgressIndicator());
     if (errorMessage.isNotEmpty) return Center(child: Text(errorMessage));
-    if (appointments.isEmpty) return const Center(child: Text("No appointments found"));
+    if (appointments.isEmpty)
+      return const Center(child: Text("No appointments found"));
 
     return RefreshIndicator(
       onRefresh: onRefresh,
@@ -68,7 +69,9 @@ class AppointmentListWidget extends StatelessWidget {
             leading: CircleAvatar(
               radius: 28,
               backgroundColor: Colors.grey.shade300,
-              backgroundImage: fullImageUrl.isNotEmpty ? NetworkImage(fullImageUrl) : null,
+              backgroundImage: fullImageUrl.isNotEmpty
+                  ? NetworkImage(fullImageUrl)
+                  : null,
               child: fullImageUrl.isEmpty ? const Icon(Icons.person) : null,
             ),
 
@@ -85,12 +88,14 @@ class AppointmentListWidget extends StatelessWidget {
             trailing: appointment.isPrescribed == true
                 ? const Icon(Icons.check_circle, color: Colors.green)
                 : null,
-                onTap: () {
-  Get.to(() => PatientInfoScreen(appointment: appointment));
-},
-
+            onTap: () async {
+              await SharedPrefs.saveAgoraChannelId(appointment.id ?? "");
+              await SharedPrefs.saveDoctorAgoraToken(
+                appointment.doctorAgoraToken ?? "",
+              );
+              Get.to(() => PatientInfoScreen(appointment: appointment));
+            },
           );
-          
         },
       ),
     );

@@ -35,4 +35,20 @@ class SharedPrefs {
   static String getLanguage() {
     return _prefs?.getString("language") ?? "en";
   }
+
+  static Future saveAgoraChannelId(String channelId) async {
+    await _prefs?.setString("agora_channel_id", channelId);
+  }
+
+  static String getAgoraChannelId() {
+    return _prefs?.getString("agora_channel_id") ?? "";
+  }
+
+  static Future saveDoctorAgoraToken(String token) async {
+    await _prefs?.setString("doctor_agora_token", token);
+  }
+
+  static String getDoctorAgoraToken() {
+    return _prefs?.getString("doctor_agora_token") ?? "";
+  }
 }

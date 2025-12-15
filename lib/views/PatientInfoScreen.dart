@@ -1,9 +1,7 @@
-
 // import 'package:beh_doctor/apiconstant/apiconstant.dart';
 // import 'package:beh_doctor/models/AppoinmentDetailModel.dart';
 // import 'package:beh_doctor/models/AppointmentModel.dart';
 // import 'package:beh_doctor/modules/auth/controller/AgoraCallController.dart';
-
 
 // import 'package:beh_doctor/views/PrescriptionScreen.dart';
 // import 'package:beh_doctor/views/TestResultScreen.dart';
@@ -14,8 +12,6 @@
 //   final Appointment appointment;
 // final AgoraCallController agoraCallController = Get.put(AgoraCallController());
 // // final controller = Get.find<AgoraCallController>();
-
-
 
 //    PatientInfoScreen({super.key, required this.appointment});
 
@@ -103,7 +99,6 @@
 //             //     ],
 //             //   ),
 //             // ),
-    
 
 // Container(
 //   padding: const EdgeInsets.all(16),
@@ -167,9 +162,6 @@
 //     ],
 //   ),
 // ),
-
-
-
 
 //             const SizedBox(height: 20),
 
@@ -309,15 +301,14 @@
 //             const SizedBox(height: 30),
 
 //             // ---------------------- CALL NOW BUTTON ----------------------
-            
-// // ---------------------- CALL NOW BUTTON ----------------------
 
+// // ---------------------- CALL NOW BUTTON ----------------------
 
 // // ---------------------- CALL NOW BUTTON ----------------------
 // ElevatedButton(
 //   onPressed: () {
 //     final controller = Get.find<AgoraCallController>();
-//     controller.setAppointment(appointment);  
+//     controller.setAppointment(appointment);
 //     controller.callNow();
 //   },
 //   style: ElevatedButton.styleFrom(
@@ -330,7 +321,6 @@
 //     style: TextStyle(fontSize: 16, color: Colors.white),
 //   ),
 // ),
-
 
 // // InkWell(
 // //   onTap: () async {
@@ -363,10 +353,8 @@
 // //       style: TextStyle(color: Colors.white, fontSize: 16),
 // //     ),
 // //   ),
-  
+
 // // )
-
-
 
 // // SizedBox(
 // //   width: double.infinity,
@@ -416,7 +404,6 @@
 // //     ),
 // //   ),
 // // ),
-
 
 //             const SizedBox(height: 25),
 //           ],
@@ -468,26 +455,26 @@
 //   }
 // }
 
-
 import 'package:beh_doctor/apiconstant/apiconstant.dart';
 import 'package:beh_doctor/models/AppointmentModel.dart';
 import 'package:beh_doctor/modules/auth/controller/AgoraCallController.dart';
 import 'package:beh_doctor/routes/AppRoutes.dart';
 
-
 // or where ApiRepo is defined
 
 import 'package:beh_doctor/views/AgoraDoctorCallScreen.dart';
-
 
 import 'package:beh_doctor/views/PrescriptionScreen.dart';
 import 'package:beh_doctor/views/TestResultScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:beh_doctor/shareprefs.dart';
 
 class PatientInfoScreen extends StatelessWidget {
   final Appointment appointment;
-  final AgoraCallController agoraCallController = Get.put(AgoraCallController());
+  final AgoraCallController agoraCallController = Get.put(
+    AgoraCallController(),
+  );
 
   PatientInfoScreen({super.key, required this.appointment});
 
@@ -498,8 +485,8 @@ class PatientInfoScreen extends StatelessWidget {
     // Final Correct Image URL
     String? imageUrl = (patient?.photo != null && patient!.photo!.isNotEmpty)
         ? (patient.photo!.startsWith("http")
-            ? patient.photo!
-            : "${ApiConstants.imageBaseUrl}${patient.photo}")
+              ? patient.photo!
+              : "${ApiConstants.imageBaseUrl}${patient.photo}")
         : null;
 
     return Scaffold(
@@ -541,7 +528,7 @@ class PatientInfoScreen extends StatelessWidget {
                     color: Colors.black12,
                     blurRadius: 5,
                     offset: Offset(0, 2),
-                  )
+                  ),
                 ],
               ),
               child: Row(
@@ -576,7 +563,7 @@ class PatientInfoScreen extends StatelessWidget {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -584,66 +571,66 @@ class PatientInfoScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             // ---------------------- PATIENT RECORDS ----------------------
-         // ---------------------- PATIENT RECORDS ----------------------
-Container(
-  width: double.infinity,
-  padding: const EdgeInsets.all(16),
-  decoration: BoxDecoration(
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(16),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black12,
-        blurRadius: 5,
-        offset: Offset(0, 2),
-      ),
-    ],
-  ),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const Text(
-        "Patient Records",
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
+            // ---------------------- PATIENT RECORDS ----------------------
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 5,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Patient Records",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
 
-      const SizedBox(height: 14),
+                  const SizedBox(height: 14),
 
-      Row(
-        children: [
-          Expanded(
-            child: _recordBox(
-              title: "Previous\nPrescriptions",
-              onTap: () {
-                Get.to(() => PrescriptionListScreen(
-                      patientId: patient?.id ?? "",
-                    ));
-              },
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _recordBox(
+                          title: "Previous\nPrescriptions",
+                          onTap: () {
+                            Get.to(
+                              () => PrescriptionListScreen(
+                                patientId: patient?.id ?? "",
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+
+                      const SizedBox(width: 12),
+
+                      Expanded(
+                        child: _recordBox(
+                          title: "Test\nResults",
+                          onTap: () {
+                            Get.to(
+                              () => TestResultScreen(
+                                appointmentId: appointment.id ?? "",
+                                appointment: appointment,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-
-          const SizedBox(width: 12),
-
-          Expanded(
-            child: _recordBox(
-              title: "Test\nResults",
-              onTap: () {
-                Get.to(() => TestResultScreen(
-                      appointmentId: appointment.id ?? "",
-                      appointment: appointment,
-                    ));
-              },
-            ),
-          ),
-        ],
-      ),
-    ],
-  ),
-),
-
 
             const SizedBox(height: 25),
 
@@ -661,10 +648,7 @@ Container(
                 children: [
                   const Text(
                     "Appointment Reason",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 10),
 
@@ -680,10 +664,7 @@ Container(
 
                   Text(
                     appointment.description ?? "No description provided",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black87,
-                    ),
+                    style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
                 ],
               ),
@@ -704,8 +685,7 @@ Container(
                     spacing: 14,
                     runSpacing: 14,
                     children: appointment.additionalFiles!.map((filePath) {
-                      String fullUrl =
-                          "${ApiConstants.imageBaseUrl}$filePath";
+                      String fullUrl = "${ApiConstants.imageBaseUrl}$filePath";
                       return Container(
                         width: 105,
                         height: 105,
@@ -728,42 +708,42 @@ Container(
                       border: Border.all(color: Colors.grey.shade300),
                     ),
                     child: const Center(
-                      child: Text("No attachments found",
-                          style: TextStyle(color: Colors.black45)),
+                      child: Text(
+                        "No attachments found",
+                        style: TextStyle(color: Colors.black45),
+                      ),
                     ),
                   ),
 
             const SizedBox(height: 30),
 
             // ---------------------- CALL NOW BUTTON ----------------------
-SizedBox(
-  width: double.infinity,
-  height: 50,
-  child: ElevatedButton(
-    onPressed: () async {
-  final controller = Get.put(AgoraCallController());
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () async {
+                  final controller = Get.put(AgoraCallController());
 
-  controller.setAppointment(appointment);
+                  await SharedPrefs.saveAgoraChannelId(appointment.id ?? "");
+                  await SharedPrefs.saveDoctorAgoraToken(
+                    appointment.doctorAgoraToken ?? "",
+                  );
 
-  await controller.callNow();
+                  controller.setAppointment(appointment);
 
-  
+                  await controller.callNow();
 
-// Get.toNamed(Routes.AgoraDoctorCallScreen);
+                  // Get.toNamed(Routes.AgoraDoctorCallScreen);
 
-print("APPOINTMENT lodoo DEBUG ---> ${appointment.toMap()}");
+                  print("APPOINTMENT lodoo DEBUG ---> ${appointment.toMap()}");
 
-
-
-
-      // ❌ DO NOT Navigate manually
-      // callNow() already sends user to call screen
-    },
-    child: const Text("Call Now"),
-  ),
-),
-
-        
+                  // ❌ DO NOT Navigate manually
+                  // callNow() already sends user to call screen
+                },
+                child: const Text("Call Now"),
+              ),
+            ),
 
             const SizedBox(height: 20),
           ],
@@ -773,42 +753,32 @@ print("APPOINTMENT lodoo DEBUG ---> ${appointment.toMap()}");
   }
 
   // ---------------------- RECORD BOX WIDGET ----------------------
-  Widget _recordBox({
-  required String title,
-  required Function() onTap,
-}) {
-  return InkWell(
-    onTap: onTap,
-    child: Container(
-      height: 105,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.green.shade200,
-          width: 1,
+  Widget _recordBox({required String title, required Function() onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 105,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.green.shade200, width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.green.shade100.withOpacity(0.25), // very soft
+              blurRadius: 3, // 🔥 small blur
+              spreadRadius: 0.5, // small spread
+              offset: Offset(0, 1), // small downward shadow
+            ),
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.green.shade100.withOpacity(0.25), // very soft
-            blurRadius: 3,  // 🔥 small blur
-            spreadRadius: 0.5, // small spread
-            offset: Offset(0, 1), // small downward shadow
-          ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
+        child: Center(
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
           ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }
